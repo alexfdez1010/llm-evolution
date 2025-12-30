@@ -1,15 +1,14 @@
-# Python Template
+# llm-evolution
 
-A modern Python project template using [uv](https://docs.astral.sh/uv/) for fast dependency management, pytest for testing, and Ruff for code quality. It includes a `AGENTS.md` file with AI Agent coding assistant guidelines to develop quality code.
+A Python library combining LLMs and evolutionary algorithms to optimize programs and systems across multiple domains and target languages (e.g. CUDA, RISC-V, algorithmic trading strategies).
 
 ## 🚀 Features
 
-- **Fast Package Management**: Uses `uv` for lightning-fast dependency resolution and installation
-- **Modern Python**: Python 3.12+ with type hints support
-- **Testing Ready**: Pre-configured pytest with unit and integration test structure
-- **Code Quality**: Ruff for formatting and linting
-- **Type Checking**: Optional basedpyright configuration
-- **Development Automation**: Makefile with common development tasks
+- **Library-first layout**: `src/`-based packaging for reliable imports
+- **Modern Python**: Python 3.12+
+- **Testing ready**: pytest with unit + integration structure
+- **Code quality**: Ruff (formatting + linting)
+- **Type checking**: Optional basedpyright configuration
 
 ## 📋 Requirements
 
@@ -28,45 +27,39 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 ```bash
 # Clone the repository
-git clone https://github.com/alexfdez1010/python-template
-cd python-template
+git clone https://github.com/alexfdez1010/llm-evolution
+cd llm-evolution
 
 # Sync dependencies (creates .venv and installs packages)
 uv sync
+
+# Install dev tools (pytest/ruff)
+uv sync --extra dev
+```
+
+### Install the library locally
+
+```bash
+# Install in editable mode (recommended for development)
+uv pip install -e .
+
+# Or install with dev extras
+uv pip install -e ".[dev]"
 ```
 
 ## 🎯 Usage
 
-### Running the Application
+### Importing the library
 
-```bash
-# Using Makefile
-make main
+```python
+import llm_evolution
 
-# Or directly with uv
-uv run src/python-template/main.py
-
-# Or with Python module syntax
-uv run python -m python-template.main
-```
-
-### Development Commands
-
-The project includes a `Makefile` with convenient shortcuts:
-
-```bash
-make main              # Run the main application
-make test              # Run all tests (unit + integration)
-make test-unit         # Run unit tests only
-make test-integration  # Run integration tests only
-make format            # Format code with Ruff
-make lint              # Lint code with Ruff
-make pre-commit        # Run pre-commit checks (unit tests + format + lint)
+print(llm_evolution.__version__)
 ```
 
 ## 🧪 Testing
 
-The project uses pytest with a clear separation between unit and integration tests:
+The repository separates:
 
 - **Unit Tests** (`tests/unit/`): Fast, isolated tests using mocks
 - **Integration Tests** (`tests/integration/`): Tests with real APIs/services
@@ -74,26 +67,36 @@ The project uses pytest with a clear separation between unit and integration tes
 ### Running Tests
 
 ```bash
+# Ensure dev extras are installed
+uv sync --extra dev
+
 # All tests
-make test
-# or
 uv run pytest
 
 # Unit tests only
-make test-unit
-# or
 uv run pytest tests/unit
 
 # Integration tests only
-make test-integration
-# or
 uv run pytest tests/integration
 
 # With verbose output
 uv run pytest -v
 
 # With coverage
-uv run pytest --cov=src/python-template
+uv run pytest --cov=src/llm_evolution
+```
+
+## 🎨 Code Quality
+
+```bash
+# Ensure dev extras are installed
+uv sync --extra dev
+
+# Format
+uv run ruff format
+
+# Lint
+uv run ruff check
 ```
 
 ## 📦 Dependency Management
@@ -139,8 +142,6 @@ uv remove <package-name>
 
 ```bash
 # Auto-format all code
-make format
-# or
 uv run ruff format
 
 # Check formatting without changes
@@ -151,39 +152,26 @@ uv run ruff format --check
 
 ```bash
 # Run linter
-make lint
-# or
 uv run ruff check
 
 # Auto-fix issues where possible
 uv run ruff check --fix
 ```
 
-### Pre-commit Checks
-
-Before committing code, run:
-
-```bash
-make pre-commit
-```
-
-This runs unit tests, formatting, and linting to ensure code quality.
-
 ## 📁 Project Structure
 
 ```
 .
 ├── src/
-│   └── python-template/          # Main package source code
+│   └── llm_evolution/            # Main package source code
 │       ├── __init__.py
-│       └── main.py               # CLI entry point
+│       └── version.py
 ├── tests/
 │   ├── unit/                     # Unit tests with mocks
 │   └── integration/              # Integration tests (real APIs/services)
 ├── .python-version               # Python version (3.12)
 ├── pyproject.toml                # Project metadata & dependencies
 ├── uv.lock                       # Locked dependencies (DO NOT edit manually)
-├── Makefile                      # Development task automation
 ├── .gitignore                    # Git ignore patterns
 ├── AGENTS.md                     # AI coding assistant guidelines
 └── README.md                     # This file
@@ -222,13 +210,12 @@ api_key = os.getenv("API_KEY")
 
 ## 🚀 Development Workflow
 
-1. **Make changes** to code in `src/python-template/`
+1. **Make changes** to code in `src/llm_evolution/`
 2. **Write tests** in `tests/unit/` or `tests/integration/`
-3. **Run tests**: `make test`
-4. **Format code**: `make format`
-5. **Lint code**: `make lint`
-6. **Run pre-commit checks**: `make pre-commit`
-7. **Commit** your changes
+3. **Run tests**: `uv run pytest`
+4. **Format code**: `uv run ruff format`
+5. **Lint code**: `uv run ruff check`
+6. **Commit** your changes
 
 ## 👥 Authors
 

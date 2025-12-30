@@ -1,6 +1,6 @@
 # BASIC INSTRUCTIONS
 
-This document provides comprehensive guidance for AI coding assistants working on this Python project. It covers project structure, tooling, testing patterns, and development workflows.
+This document provides comprehensive guidance for AI coding assistants working on this Python *library* project. It covers project structure, packaging, tooling, testing patterns, and development workflows.
 
 ## Project Overview
 
@@ -17,9 +17,9 @@ This document provides comprehensive guidance for AI coding assistants working o
 ```
 .
 ├── src/
-│   └── <package_name>/          # Main package source code
+│   └── llm_evolution/           # Main package source code
 │       ├── __init__.py
-│       ├── main.py              # CLI entry point
+│       ├── version.py
 │       └── *.py                 # Module files
 ├── tests/
 │   ├── unit/                    # Unit tests with mocks
@@ -29,7 +29,6 @@ This document provides comprehensive guidance for AI coding assistants working o
 ├── .python-version              # Python version (e.g., 3.12)
 ├── pyproject.toml               # Project metadata & dependencies
 ├── uv.lock                      # Locked dependencies (DO NOT edit manually)
-├── Makefile                     # Development task automation
 ├── .gitignore                   # Git ignore patterns
 └── README.md                    # Project documentation
 ```
@@ -47,6 +46,9 @@ cd <project-directory>
 
 # Sync dependencies (creates .venv and installs packages)
 uv sync
+
+# Install dev tooling (pytest/ruff)
+uv sync --extra dev
 ```
 
 ### Common uv Commands
@@ -65,54 +67,37 @@ uv sync
 ### Running Code
 
 ```bash
-# Run a Python script (uv handles environment automatically)
-uv run python -m <package_name>.main
-
-# Run with arguments
-uv run python -m <package_name>.main --arg value
-
 # Run any command in the project environment
 uv run <command>
+
+# Example: import the library
+uv run python -c "import llm_evolution; print(llm_evolution.__version__)"
 ```
 
 **Note**: `uv run` automatically ensures the environment is synced before execution. No need to manually activate the virtual environment.
 
-## Makefile Targets
+## Development Commands
 
-The `Makefile` provides convenient shortcuts for common tasks:
+Use `uv run` for all commands so the environment stays consistent.
 
-```makefile
-test: test-unit test-integration
-	@echo "All tests completed successfully"
-
-pre-commit: test-unit format lint
-	@echo "Pre-commit checks passed"
-
-test-unit:
-	@echo "Running unit tests..."
-	uv run pytest -s tests/unit
-
-test-integration:
-	@echo "Running integration tests..."
-	uv run pytest -s tests/integration
-
-format:
-	@echo "Formatting code..."
-	uv run ruff format
-
-lint:
-	@echo "Running linter..."
-	uv run ruff check
-```
-
-**Usage:**
 ```bash
-make test           # Run all tests
-make test-unit      # Unit tests only
-make test-integration  # Integration tests only
-make format         # Auto-format code
-make lint           # Check code quality
-make pre-commit     # Run before committing
+# Ensure dev extras are installed
+uv sync --extra dev
+
+# Run all tests
+uv run pytest
+
+# Unit tests only
+uv run pytest tests/unit
+
+# Integration tests only
+uv run pytest tests/integration
+
+# Format
+uv run ruff format
+
+# Lint
+uv run ruff check
 ```
 
 ## Testing Strategy
@@ -190,18 +175,12 @@ def test_api_integration():
 
 ```bash
 # All tests
-make test
-# or
 uv run pytest
 
 # Unit tests only
-make test-unit
-# or
 uv run pytest tests/unit
 
 # Integration tests only
-make test-integration
-# or
 uv run pytest tests/integration
 
 # Run specific test file
@@ -211,7 +190,7 @@ uv run pytest tests/unit/test_specific.py
 uv run pytest -v
 
 # Run with coverage
-uv run pytest --cov=src/<package_name>
+uv run pytest --cov=src/llm_evolution
 ```
 
 ## Code Quality
@@ -220,8 +199,6 @@ uv run pytest --cov=src/<package_name>
 
 ```bash
 # Auto-format all code
-make format
-# or
 uv run ruff format
 
 # Check formatting without changes
@@ -232,23 +209,11 @@ uv run ruff format --check
 
 ```bash
 # Run linter
-make lint
-# or
 uv run ruff check
 
 # Auto-fix issues where possible
 uv run ruff check --fix
 ```
-
-### Pre-commit Checks
-
-Before committing code, run:
-
-```bash
-make pre-commit
-```
-
-This runs unit tests, formatting, and linting to ensure code quality.
 
 ## Project Configuration (pyproject.toml)
 
@@ -271,7 +236,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/<package_name>"]
+packages = ["src/llm_evolution"]
 
 [tool.pytest.ini_options]
 addopts = "-v --capture=no"
@@ -447,11 +412,11 @@ build/
 ### Adding a New Feature
 
 1. Add dependencies if needed: `uv add <package>`
-2. Implement feature in `src/<package_name>/`
+2. Implement feature in `src/llm_evolution/`
 3. Write unit tests in `tests/unit/test_<feature>.py`
 4. Write integration tests if needed in `tests/integration/`
-5. Run tests: `make test`
-6. Format and lint: `make format && make lint`
+5. Run tests: `uv run pytest`
+6. Format and lint: `uv run ruff format && uv run ruff check`
 
 ### Updating Dependencies
 
@@ -470,7 +435,7 @@ uv sync
 
 ```bash
 # Run with Python debugger
-uv run python -m pdb -m <package_name>.main
+uv run python -m pdb -c continue -m llm_evolution
 
 # Run tests with output
 uv run pytest -s -v
@@ -607,7 +572,13 @@ except Exception as e:
 
 ### 5. Documentation
 
-Use docstrings for modules, classes, and functions ALWAYS:
+Use docstrings for modules, classes, and functions ALWAYS.
+
+Additionally, for **non-trivial functions**, add short inline comments that clarify:
+
+- Important invariants/assumptions
+- Non-obvious algorithmic steps
+- Units / coordinate systems / domain constraints (e.g. trading, CUDA kernels)
 
 ```python
 def calculate_score(
@@ -803,13 +774,13 @@ uv run ruff format
 When working on this project:
 
 1. **Always use `uv run`** for executing Python commands
-2. **Run tests** after making changes: `make test-unit`
-3. **Format code** before committing: `make format`
-4. **Check linting**: `make lint`
+2. **Run tests** after making changes: `uv run pytest`
+3. **Format code** before committing: `uv run ruff format`
+4. **Check linting**: `uv run ruff check`
 5. **Update tests** when modifying functionality
 6. **Use type hints** for new functions
 7. **Follow existing patterns** in the codebase
-8. **Add docstrings** for public APIs
+8. **Add docstrings** for public APIs (and keep them stable)
 9. **Mock external dependencies** in unit tests
 10. **Keep integration tests separate** from unit tests
 
@@ -821,14 +792,14 @@ When implementing new features:
 - Use protocols for interfaces
 - Use dataclasses for data structures
 - Follow the existing module organization
-- Run `make pre-commit` before finishing
+- Run `uv run pytest`, then `uv run ruff format` and `uv run ruff check` before finishing
 
 ### Testing Checklist
 
-- [ ] Unit tests pass: `make test-unit`
-- [ ] Integration tests pass (if applicable): `make test-integration`
-- [ ] Code formatted: `make format`
-- [ ] Linting passes: `make lint`
+- [ ] Unit tests pass: `uv run pytest tests/unit`
+- [ ] Integration tests pass (if applicable): `uv run pytest tests/integration`
+- [ ] Code formatted: `uv run ruff format`
+- [ ] Linting passes: `uv run ruff check`
 - [ ] Type hints added for new functions
 - [ ] Docstrings added for public APIs
 - [ ] Edge cases tested
