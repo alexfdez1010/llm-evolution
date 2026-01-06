@@ -1,6 +1,8 @@
 # llm-evolution
 
-A Python library combining LLMs and evolutionary algorithms to optimize programs and systems across multiple domains and target languages (e.g. CUDA, RISC-V, algorithmic trading strategies).
+A professional-grade Python library combining Large Language Models (LLMs) with Evolutionary Algorithms (EA) to optimize programs, systems, and strategies across multiple domains (e.g., CUDA kernels, RISC-V assembly, algorithmic trading).
+
+`llm-evolution` provides a robust, protocol-based framework for building complex evolutionary pipelines where LLMs can act as intelligent mutators, crossovers, or evaluators.
 
 ## 🚀 Features
 
@@ -49,54 +51,109 @@ uv pip install -e ".[dev]"
 
 ## 🎯 Usage
 
-### Importing the library
+`llm-evolution` provides a flexible framework for implementing evolutionary algorithms. It uses a protocol-based design, allowing you to easily swap out different strategies for population initialization, evaluation, selection, crossover, and mutation.
+
+### Core Components
+
+The library is built around several key interfaces (Protocols):
+
+- **`InitialPopulation[T]`**: Generates the starting set of individuals.
+- **`Evaluation[T]`**: Calculates the fitness score for an individual.
+- **`Selection[T]`**: Decides which individuals survive to the next generation.
+- **`Crossover[T]`**: Combines parents to create offspring (optional).
+- **`Mutation[T]`**: Introduces random variations into individuals (optional).
+- **`FinishCondition[T]`**: Determines when the evolutionary process should stop.
+
+### Basic Example
+
+Here is how you can set up and run a simple evolutionary algorithm:
 
 ```python
-import llm_evolution
+from typing import List
+import random
+from llm_evolution.algorithm.evolutionary_algorithm import EvolutionaryAlgorithm
+from llm_evolution.interfaces.initial_population import initial_population_fn
+from llm_evolution.interfaces.evaluation import evaluation_fn
+from llm_evolution.interfaces.selection import selection_fn
+from llm_evolution.interfaces.finish_condition import finish_condition_fn
 
-print(llm_evolution.__version__)
+# 1. Define your population initialization
+@initial_population_fn
+def my_initial_pop(size: int) -> List[int]:
+    return [random.randint(0, 100) for _ in range(size)]
+
+# 2. Define how to evaluate individuals (higher is better)
+@evaluation_fn
+def my_evaluation(instance: int) -> float:
+    return float(instance)  # Simple maximization of the integer value
+
+# 3. Define survivor selection
+@selection_fn
+def my_selection(population, offspring, fitness_scores):
+    # Keep the best individuals from the combined pool
+    combined = population + offspring
+    indexed = list(enumerate(fitness_scores))
+    indexed.sort(key=lambda x: x[1], reverse=True)
+    return [combined[i] for i, _ in indexed[:len(population)]]
+
+# 4. Define when to stop
+@finish_condition_fn
+def my_finish(population, generation, fitness_scores):
+    return generation >= 50 or max(fitness_scores) >= 100
+
+# 5. Initialize and run the algorithm
+ea = EvolutionaryAlgorithm(
+    initial_population=my_initial_pop,
+    evaluation=my_evaluation,
+    selection=my_selection,
+    finish_condition=my_finish,
+    population_size=20
+)
+
+result = ea.run(log=True)
+print(f"Best instance: {result.best_instance} with fitness {result.best_fitness}")
 ```
+
+## 🧬 How the Algorithm Works
+
+The `EvolutionaryAlgorithm` orchestrates a standard evolutionary cycle:
+
+1.  **Initialization**: The `initial_population` strategy generates an initial set of `population_size` individuals.
+2.  **Evaluation**: Each individual in the current population is evaluated using the `evaluation` strategy to determine its fitness.
+3.  **Check Stop Condition**: The `finish_condition` is checked. If it returns `True`, the evolution stops.
+4.  **Reproduction**:
+    - **Crossover**: If a `crossover` strategy is provided, pairs of parents are selected and combined to create offspring.
+    - **Mutation**: If a `mutation` strategy is provided, random variations are applied to a subset of the population and offspring.
+5.  **Selection**: The `selection` strategy chooses which individuals from the current population and the new offspring will survive to the next generation.
+6.  **Iteration**: Steps 2-5 are repeated until the stop condition is met.
+
+The library's use of Generics (`T`) ensures that you can evolve any type of object, from simple numbers to complex LLM-generated code or system configurations.
 
 ## 🧪 Testing
 
-The repository separates:
-
-- **Unit Tests** (`tests/unit/`): Fast, isolated tests using mocks
-- **Integration Tests** (`tests/integration/`): Tests with real APIs/services
+The repository separates unit and integration tests. We use a `Makefile` to simplify common development tasks.
 
 ### Running Tests
 
 ```bash
-# Ensure dev extras are installed
-uv sync --extra dev
+# Run all tests
+make test
 
-# All tests
+# Or run manually with uv
 uv run pytest
-
-# Unit tests only
-uv run pytest tests/unit
-
-# Integration tests only
-uv run pytest tests/integration
-
-# With verbose output
-uv run pytest -v
-
-# With coverage
-uv run pytest --cov=src/llm_evolution
 ```
 
 ## 🎨 Code Quality
 
+We use [Ruff](https://github.com/astral-sh/ruff) for lightning-fast linting and formatting.
+
 ```bash
-# Ensure dev extras are installed
-uv sync --extra dev
+# Format and lint code
+make format
+make lint
 
-# Format
-uv run ruff format
-
-# Lint
-uv run ruff check
+# Run all checks (format, lint, and test)
+make all
 ```
 
 ## 📦 Dependency Management
@@ -210,12 +267,12 @@ api_key = os.getenv("API_KEY")
 
 ## 🚀 Development Workflow
 
-1. **Make changes** to code in `src/llm_evolution/`
-2. **Write tests** in `tests/unit/` or `tests/integration/`
-3. **Run tests**: `uv run pytest`
-4. **Format code**: `uv run ruff format`
-5. **Lint code**: `uv run ruff check`
-6. **Commit** your changes
+1.  **Make changes** to code in `src/llm_evolution/`
+2.  **Verify changes** using the `Makefile`:
+    ```bash
+    make pre-commit
+    ```
+3.  **Commit** your changes
 
 ## 👥 Authors
 
