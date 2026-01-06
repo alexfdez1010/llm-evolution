@@ -13,7 +13,15 @@ class Mutation(Protocol[T]):
 
 
 def mutation_fn(fn):
-    """Decorator to convert a function into a Mutation protocol implementation."""
+    """
+    Decorator to convert a function into a Mutation protocol implementation.
+
+    Args:
+        fn: A function that takes an instance and returns a mutated instance.
+
+    Returns:
+        Wrapper: A class implementing the Mutation protocol.
+    """
 
     class Wrapper:
         def __init__(self, func):

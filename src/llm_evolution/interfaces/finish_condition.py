@@ -15,7 +15,15 @@ class FinishCondition(Protocol[T]):
 
 
 def finish_condition_fn(fn):
-    """Decorator to convert a function into a FinishCondition protocol implementation."""
+    """
+    Decorator to convert a function into a FinishCondition protocol implementation.
+
+    Args:
+        fn: A function that takes population, generation, and fitness scores and returns a boolean.
+
+    Returns:
+        Wrapper: A class implementing the FinishCondition protocol.
+    """
 
     class Wrapper:
         def __init__(self, func):

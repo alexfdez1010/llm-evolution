@@ -54,14 +54,14 @@ def test_evolutionary_algorithm_integration():
         initial_population=init_pop,
         evaluation=evaluate,
         selection=select,
+        finish_condition=finish,
         crossover=crossover,
         mutation=mutate,
         population_size=20,
-        mutation_rate=0.2,
     )
 
     # Run algorithm
-    result = ea.run(finish_condition=finish)
+    result = ea.run(log=True)
 
     # Assertions
     assert result.best_instance is not None

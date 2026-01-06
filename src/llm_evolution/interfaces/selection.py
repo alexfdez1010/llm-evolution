@@ -15,7 +15,15 @@ class Selection(Protocol[T]):
 
 
 def selection_fn(fn):
-    """Decorator to convert a function into a Selection protocol implementation."""
+    """
+    Decorator to convert a function into a Selection protocol implementation.
+
+    Args:
+        fn: A function that takes population, offspring, and fitness scores and returns survivors.
+
+    Returns:
+        Wrapper: A class implementing the Selection protocol.
+    """
 
     class Wrapper:
         def __init__(self, func):

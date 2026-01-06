@@ -13,7 +13,15 @@ class InitialPopulation(Protocol[T]):
 
 
 def initial_population_fn(fn):
-    """Decorator to convert a function into an InitialPopulation protocol implementation."""
+    """
+    Decorator to convert a function into an InitialPopulation protocol implementation.
+
+    Args:
+        fn: A function that takes a size and returns an initial population.
+
+    Returns:
+        Wrapper: A class implementing the InitialPopulation protocol.
+    """
 
     class Wrapper:
         def __init__(self, func):
