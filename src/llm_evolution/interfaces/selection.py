@@ -10,7 +10,17 @@ class Selection(Protocol[T]):
     def __call__(
         self, population: List[T], offspring: List[T], fitness_scores: List[float]
     ) -> List[T]:
-        """Select individuals to survive to the next generation."""
+        """
+        Select survivors for the next generation from the combined pool of current population and offspring.
+
+        Args:
+            population: The current population of individuals.
+            offspring: The new offspring produced in the current generation.
+            fitness_scores: The fitness scores corresponding to the combined individuals (population + offspring).
+
+        Returns:
+            List[T]: The list of individuals selected to survive to the next generation.
+        """
         ...
 
 

@@ -8,7 +8,15 @@ class Evaluation(Protocol[T]):
     """Protocol for evaluating the fitness of an instance."""
 
     def __call__(self, instance: T) -> float:
-        """Calculate and return the fitness score."""
+        """
+        Calculate and return the fitness score for a given individual.
+
+        Args:
+            instance: The individual instance to evaluate.
+
+        Returns:
+            float: The calculated fitness score. Higher scores typically represent better individuals.
+        """
         ...
 
 

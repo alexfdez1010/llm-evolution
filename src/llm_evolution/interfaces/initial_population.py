@@ -8,7 +8,15 @@ class InitialPopulation(Protocol[T]):
     """Protocol for generating the initial population."""
 
     def __call__(self, size: int) -> List[T]:
-        """Generate the initial population of a given size."""
+        """
+        Generate an initial population of individuals.
+
+        Args:
+            size: The desired number of individuals in the initial population.
+
+        Returns:
+            List[T]: A list of newly generated individuals of the specified size.
+        """
         ...
 
 

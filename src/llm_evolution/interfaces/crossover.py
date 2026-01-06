@@ -8,7 +8,15 @@ class Crossover(Protocol[T]):
     """Protocol for crossover operations in evolutionary algorithms."""
 
     def __call__(self, parents: List[T]) -> List[T]:
-        """Combine parents to create offspring."""
+        """
+        Combine parents to create offspring.
+
+        Args:
+            parents: A list of parent individuals selected for reproduction.
+
+        Returns:
+            List[T]: A list of new offspring individuals produced by the crossover.
+        """
         ...
 
 

@@ -10,7 +10,17 @@ class FinishCondition(Protocol[T]):
     def __call__(
         self, population: List[T], generation: int, fitness_scores: List[float]
     ) -> bool:
-        """Return True if the evolutionary process should stop."""
+        """
+        Determine whether the evolutionary process should stop based on the current state.
+
+        Args:
+            population: The current population of individuals.
+            generation: The current generation number.
+            fitness_scores: The fitness scores for the current population.
+
+        Returns:
+            bool: True if the evolution should stop, False otherwise.
+        """
         ...
 
 
