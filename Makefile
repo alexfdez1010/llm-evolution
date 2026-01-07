@@ -11,4 +11,4 @@ lint:
 format:
 	uv run ruff format
 
-pre-commit: test format lint
+pre-commit: format lint test
