@@ -31,6 +31,18 @@ def test_mutation_decorator():
     assert my_mutation(1) == 2
 
 
+def test_mutation_decorator_returns_none():
+    @mutation_fn
+    def my_mutation(instance: int) -> int | None:
+        if instance > 10:
+            return None
+        return instance + 1
+
+    assert isinstance(my_mutation, Mutation)
+    assert my_mutation(1) == 2
+    assert my_mutation(11) is None
+
+
 def test_evaluation_decorator():
     @evaluation_fn
     def my_evaluation(instance: int) -> float:

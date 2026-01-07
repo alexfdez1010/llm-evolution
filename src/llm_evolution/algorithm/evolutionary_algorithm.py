@@ -131,7 +131,9 @@ class EvolutionaryAlgorithm(Generic[T]):
                     min(len(population), len(population) + len(offspring)),
                 )
                 for ind in to_mutate:
-                    offspring.append(self.mutation(ind))
+                    mutated = self.mutation(ind)
+                    if mutated is not None:
+                        offspring.append(mutated)
 
             offspring_fitness = [self.evaluation(ind) for ind in offspring]
             combined_fitness = fitness_scores + offspring_fitness

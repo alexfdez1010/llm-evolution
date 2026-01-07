@@ -1,4 +1,4 @@
-from typing import Protocol, TypeVar, runtime_checkable
+from typing import Protocol, TypeVar, runtime_checkable, Optional
 
 T = TypeVar("T")
 
@@ -7,7 +7,7 @@ T = TypeVar("T")
 class Mutation(Protocol[T]):
     """Protocol for mutation operations in evolutionary algorithms."""
 
-    def __call__(self, instance: T) -> T:
+    def __call__(self, instance: T) -> Optional[T]:
         """
         Apply random variations to a single individual.
 
@@ -15,7 +15,8 @@ class Mutation(Protocol[T]):
             instance: The individual instance to be mutated.
 
         Returns:
-            T: A new individual resulting from the mutation process.
+            Optional[T]: A new individual resulting from the mutation process,
+                       or None if no mutation was performed.
         """
         ...
 
@@ -25,7 +26,7 @@ def mutation_fn(fn):
     Decorator to convert a function into a Mutation protocol implementation.
 
     Args:
-        fn: A function that takes an instance and returns a mutated instance.
+        fn: A function that takes an instance and returns a mutated instance or None.
 
     Returns:
         Wrapper: A class implementing the Mutation protocol.
@@ -35,7 +36,7 @@ def mutation_fn(fn):
         def __init__(self, func):
             self.func = func
 
-        def __call__(self, instance: T) -> T:
+        def __call__(self, instance: T) -> Optional[T]:
             return self.func(instance)
 
     return Wrapper(fn)

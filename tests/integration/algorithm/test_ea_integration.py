@@ -1,6 +1,9 @@
 import random
 from typing import List
-from llm_evolution.algorithm.evolutionary_algorithm import EvolutionaryAlgorithm
+from llm_evolution.algorithm.evolutionary_algorithm import (
+    EvolutionaryAlgorithm,
+    EvolutionResult,
+)
 from llm_evolution.interfaces.crossover import crossover_fn
 from llm_evolution.interfaces.mutation import mutation_fn
 from llm_evolution.interfaces.evaluation import evaluation_fn
@@ -216,3 +219,51 @@ def test_ea_complex_type_integration():
     result = ea.run()
     assert isinstance(result.best_instance, Individual)
     assert len(result.population) == 10
+
+
+def test_ea_mutation_returns_none():
+    """Test algorithm when mutation returns None."""
+
+    from llm_evolution.interfaces.initial_population import InitialPopulation
+
+    initial_pop_list: List[int] = [1, 2, 3]
+
+    class MockInitialPopulation:
+        def __call__(self, size: int) -> List[int]:
+            res: List[int] = initial_pop_list
+            return res
+
+    init_pop: InitialPopulation[int] = MockInitialPopulation()
+
+    @evaluation_fn
+    def evaluate(instance: int) -> float:
+        return float(instance)
+
+    @selection_fn
+    def select(pop: List[int], off: List[int], scores: List[float]) -> List[int]:
+        # Just return the offspring if any, otherwise return pop
+        return off if off else pop
+
+    @mutation_fn
+    def mutate(instance: int) -> int | None:
+        # Never mutate
+        return None
+
+    @finish_condition_fn
+    def finish(pop: List[int], gen: int, scores: List[float]) -> bool:
+        return gen >= 1
+
+    ea = EvolutionaryAlgorithm[int](
+        initial_population=init_pop,
+        evaluation=evaluate,
+        selection=select,
+        finish_condition=finish,
+        mutation=mutate,
+        population_size=3,
+    )
+    result: EvolutionResult[int] = ea.run()
+    # If mutation always returns None, offspring will be empty
+    # Selection will receive empty offspring and return pop (1, 2, 3)
+    population_list: List[int] = result.population
+    assert sorted(population_list) == [1, 2, 3]
+    assert result.generation == 1

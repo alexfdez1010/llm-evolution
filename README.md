@@ -61,7 +61,7 @@ The library is built around several key interfaces (Protocols):
 - **`Evaluation[T]`**: Calculates the fitness score for an individual.
 - **`Selection[T]`**: Decides which individuals survive to the next generation.
 - **`Crossover[T]`**: Combines parents to create offspring (optional).
-- **`Mutation[T]`**: Introduces random variations into individuals (optional).
+- **`Mutation[T]`**: Introduces random variations into individuals (optional). Can return `None` if no mutation is performed.
 - **`FinishCondition[T]`**: Determines when the evolutionary process should stop.
 
 ### Basic Example

@@ -30,3 +30,8 @@ exclude = [
 
 [tool.pytest.ini_options]
 addopts = "-v --capture=no"
+
+[dependency-groups]
+dev = [
+    "pyright>=1.1.407",
+]
