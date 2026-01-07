@@ -20,12 +20,20 @@ This document provides comprehensive guidance for AI coding assistants working o
 │   └── llm_evolution/           # Main package source code
 │       ├── __init__.py
 │       ├── version.py
-│       └── *.py                 # Module files
+│       ├── ai/                  # AI-related interfaces and implementations
+│       │   ├── interfaces/      # Protocols for LLMs and embeddings
+│       │   │   ├── llm.py
+│       │   │   └── embedding.py
+│       │   └── implementations/ # Concrete AI model implementations
+│       │       ├── llm.py
+│       │       └── embedding.py
+│       ├── algorithm/           # Evolutionary algorithm logic
+│       └── interfaces/          # Evolution-specific interfaces (mutation, crossover, etc.)
 ├── tests/
 │   ├── unit/                    # Unit tests with mocks
-│   │   └── test_*.py
-│   └── integration/             # Integration tests (real APIs/services)
-│       └── test_*.py
+│   │   ├── ai/                  # AI-related unit tests
+│   │   └── interfaces/          # Evolution-related unit tests
+│   └── integration/             # Integration tests
 ├── .python-version              # Python version (e.g., 3.12)
 ├── pyproject.toml               # Project metadata & dependencies
 ├── uv.lock                      # Locked dependencies (DO NOT edit manually)
@@ -774,7 +782,7 @@ uv run ruff format
 When working on this project:
 
 1. **Always use `uv run`** for executing Python commands
-2. **Run tests** after making changes: `uv run pytest`
+2. **CRITICAL: Run all tests** before finishing ANY task: `uv run pytest`. You MUST ensure 100% pass rate.
 3. **Format code** before committing: `uv run ruff format`
 4. **Check linting**: `uv run ruff check`
 5. **Update tests** when modifying functionality
@@ -796,6 +804,7 @@ When implementing new features:
 
 ### Testing Checklist
 
+- [ ] **ALL** tests pass: `uv run pytest` (Run the full suite to catch regression/conflicts)
 - [ ] Unit tests pass: `uv run pytest tests/unit`
 - [ ] Integration tests pass (if applicable): `uv run pytest tests/integration`
 - [ ] Code formatted: `uv run ruff format`
