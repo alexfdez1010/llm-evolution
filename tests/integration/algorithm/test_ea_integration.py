@@ -1,5 +1,4 @@
 import random
-from typing import List
 from llm_evolution.algorithm.evolutionary_algorithm import (
     EvolutionaryAlgorithm,
     EvolutionResult,
@@ -19,7 +18,7 @@ def test_evolutionary_algorithm_integration():
     """
 
     @initial_population_fn
-    def init_pop(size: int) -> List[int]:
+    def init_pop(size: int) -> list[int]:
         return [random.randint(0, 10) for _ in range(size)]
 
     @evaluation_fn
@@ -27,7 +26,7 @@ def test_evolutionary_algorithm_integration():
         return float(instance)
 
     @selection_fn
-    def select(pop: List[int], off: List[int], scores: List[float]) -> List[int]:
+    def select(pop: list[int], off: list[int], scores: list[float]) -> list[int]:
         # Simple elitist selection: pick the best ones from combined population
         combined = pop + off
         # Sort by fitness (scores are for combined population)
@@ -38,7 +37,7 @@ def test_evolutionary_algorithm_integration():
         return [combined[i] for i in selected_indices]
 
     @crossover_fn
-    def crossover(parents: List[int]) -> List[int]:
+    def crossover(parents: list[int]) -> list[int]:
         # Average of parents
         return [sum(parents) // len(parents)]
 
@@ -48,7 +47,7 @@ def test_evolutionary_algorithm_integration():
         return instance + random.choice([-1, 1])
 
     @finish_condition_fn
-    def finish(pop: List[int], gen: int, scores: List[float]) -> bool:
+    def finish(pop: list[int], gen: int, scores: list[float]) -> bool:
         # Finish if we reach a target value or max generations
         return max(scores) >= 100 or gen >= 50
 
@@ -77,7 +76,7 @@ def test_ea_no_crossover_no_mutation():
     """Test algorithm with only selection and no genetic operators."""
 
     @initial_population_fn
-    def init_pop(size: int) -> List[int]:
+    def init_pop(size: int) -> list[int]:
         return [5] * size
 
     @evaluation_fn
@@ -85,11 +84,11 @@ def test_ea_no_crossover_no_mutation():
         return float(instance)
 
     @selection_fn
-    def select(pop: List[int], off: List[int], scores: List[float]) -> List[int]:
+    def select(pop: list[int], off: list[int], scores: list[float]) -> list[int]:
         return pop
 
     @finish_condition_fn
-    def finish(pop: List[int], gen: int, scores: List[float]) -> bool:
+    def finish(pop: list[int], gen: int, scores: list[float]) -> bool:
         return gen >= 5
 
     ea = EvolutionaryAlgorithm(
@@ -108,7 +107,7 @@ def test_ea_immediate_finish():
     """Test algorithm that finishes at generation 0."""
 
     @initial_population_fn
-    def init_pop(size: int) -> List[int]:
+    def init_pop(size: int) -> list[int]:
         return [1] * size
 
     @evaluation_fn
@@ -116,11 +115,11 @@ def test_ea_immediate_finish():
         return 1.0
 
     @selection_fn
-    def select(pop: List[int], off: List[int], scores: List[float]) -> List[int]:
+    def select(pop: list[int], off: list[int], scores: list[float]) -> list[int]:
         return pop
 
     @finish_condition_fn
-    def finish(pop: List[int], gen: int, scores: List[float]) -> bool:
+    def finish(pop: list[int], gen: int, scores: list[float]) -> bool:
         return True
 
     ea = EvolutionaryAlgorithm(
@@ -139,7 +138,7 @@ def test_ea_population_size_one():
     """Test algorithm with a single individual (minimal population)."""
 
     @initial_population_fn
-    def init_pop(size: int) -> List[int]:
+    def init_pop(size: int) -> list[int]:
         return [10]
 
     @evaluation_fn
@@ -147,7 +146,7 @@ def test_ea_population_size_one():
         return float(instance)
 
     @selection_fn
-    def select(pop: List[int], off: List[int], scores: List[float]) -> List[int]:
+    def select(pop: list[int], off: list[int], scores: list[float]) -> list[int]:
         combined = pop + off
         indexed_scores = list(enumerate(scores))
         indexed_scores.sort(key=lambda x: x[1], reverse=True)
@@ -158,7 +157,7 @@ def test_ea_population_size_one():
         return instance + 1
 
     @finish_condition_fn
-    def finish(pop: List[int], gen: int, scores: List[float]) -> bool:
+    def finish(pop: list[int], gen: int, scores: list[float]) -> bool:
         return gen >= 10
 
     ea = EvolutionaryAlgorithm(
@@ -180,10 +179,10 @@ def test_ea_complex_type_integration():
 
     @dataclass
     class Individual:
-        genes: List[float]
+        genes: list[float]
 
     @initial_population_fn
-    def init_pop(size: int) -> List[Individual]:
+    def init_pop(size: int) -> list[Individual]:
         return [Individual([random.random() for _ in range(2)]) for _ in range(size)]
 
     @evaluation_fn
@@ -192,10 +191,10 @@ def test_ea_complex_type_integration():
 
     @selection_fn
     def select(
-        pop: List[Individual], off: List[Individual], scores: List[float]
-    ) -> List[Individual]:
+        pop: list[Individual], off: list[Individual], fitness_scores: list[float]
+    ) -> list[Individual]:
         combined = pop + off
-        indexed_scores = list(enumerate(scores))
+        indexed_scores = list(enumerate(fitness_scores))
         indexed_scores.sort(key=lambda x: x[1], reverse=True)
         return [combined[i] for i, _ in indexed_scores[: len(pop)]]
 
@@ -205,7 +204,7 @@ def test_ea_complex_type_integration():
         return Individual(new_genes)
 
     @finish_condition_fn
-    def finish(pop: List[Individual], gen: int, scores: List[float]) -> bool:
+    def finish(pop: list[Individual], gen: int, scores: list[float]) -> bool:
         return gen >= 20
 
     ea = EvolutionaryAlgorithm(
@@ -226,11 +225,11 @@ def test_ea_mutation_returns_none():
 
     from llm_evolution.interfaces.initial_population import InitialPopulation
 
-    initial_pop_list: List[int] = [1, 2, 3]
+    initial_pop_list: list[int] = [1, 2, 3]
 
     class MockInitialPopulation:
-        def __call__(self, size: int) -> List[int]:
-            res: List[int] = initial_pop_list
+        def __call__(self, size: int) -> list[int]:
+            res: list[int] = initial_pop_list
             return res
 
     init_pop: InitialPopulation[int] = MockInitialPopulation()
@@ -240,7 +239,7 @@ def test_ea_mutation_returns_none():
         return float(instance)
 
     @selection_fn
-    def select(pop: List[int], off: List[int], scores: List[float]) -> List[int]:
+    def select(pop: list[int], off: list[int], scores: list[float]) -> list[int]:
         # Just return the offspring if any, otherwise return pop
         return off if off else pop
 
@@ -250,7 +249,7 @@ def test_ea_mutation_returns_none():
         return None
 
     @finish_condition_fn
-    def finish(pop: List[int], gen: int, scores: List[float]) -> bool:
+    def finish(pop: list[int], gen: int, scores: list[float]) -> bool:
         return gen >= 1
 
     ea = EvolutionaryAlgorithm[int](
@@ -264,6 +263,6 @@ def test_ea_mutation_returns_none():
     result: EvolutionResult[int] = ea.run()
     # If mutation always returns None, offspring will be empty
     # Selection will receive empty offspring and return pop (1, 2, 3)
-    population_list: List[int] = result.population
+    population_list: list[int] = result.population
     assert sorted(population_list) == [1, 2, 3]
     assert result.generation == 1

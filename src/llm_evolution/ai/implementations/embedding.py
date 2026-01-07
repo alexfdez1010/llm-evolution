@@ -1,4 +1,4 @@
-from typing import List, Optional, Any
+from typing import Any
 from openai import OpenAI
 from llm_evolution.ai.interfaces.embedding import EmbeddingModel
 
@@ -15,7 +15,7 @@ class OpenAIEmbedding(EmbeddingModel):
         self,
         model: str,
         api_key: str = "sk-no-key-required",
-        base_url: Optional[str] = None,
+        base_url: str | None = None,
         **kwargs: Any,
     ):
         """
@@ -31,7 +31,7 @@ class OpenAIEmbedding(EmbeddingModel):
         self.model = model
         self.client = OpenAI(api_key=api_key, base_url=base_url, **kwargs)
 
-    def __call__(self, text: str) -> List[float]:
+    def __call__(self, text: str) -> list[float]:
         """
         Generates an embedding vector using the OpenAI embeddings endpoint.
 
@@ -39,7 +39,7 @@ class OpenAIEmbedding(EmbeddingModel):
             text: The input text to embed.
 
         Returns:
-            List[float]: The embedding vector.
+            list[float]: The embedding vector.
         """
         response = self.client.embeddings.create(
             model=self.model,

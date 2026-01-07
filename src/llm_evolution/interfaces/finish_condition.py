@@ -1,4 +1,4 @@
-from typing import Protocol, TypeVar, List, runtime_checkable
+from typing import Protocol, TypeVar, runtime_checkable
 
 T = TypeVar("T")
 
@@ -8,7 +8,7 @@ class FinishCondition(Protocol[T]):
     """Protocol for determining when to finish the evolutionary process."""
 
     def __call__(
-        self, population: List[T], generation: int, fitness_scores: List[float]
+        self, population: list[T], generation: int, fitness_scores: list[float]
     ) -> bool:
         """
         Determine whether the evolutionary process should stop based on the current state.
@@ -40,7 +40,7 @@ def finish_condition_fn(fn):
             self.func = func
 
         def __call__(
-            self, population: List[T], generation: int, fitness_scores: List[float]
+            self, population: list[T], generation: int, fitness_scores: list[float]
         ) -> bool:
             return self.func(population, generation, fitness_scores)
 

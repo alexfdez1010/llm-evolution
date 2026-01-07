@@ -1,4 +1,4 @@
-from typing import Protocol, TypeVar, List, runtime_checkable
+from typing import Protocol, TypeVar, runtime_checkable
 
 T = TypeVar("T")
 
@@ -7,7 +7,7 @@ T = TypeVar("T")
 class InitialPopulation(Protocol[T]):
     """Protocol for generating the initial population."""
 
-    def __call__(self, size: int) -> List[T]:
+    def __call__(self, size: int) -> list[T]:
         """
         Generate an initial population of individuals.
 
@@ -15,7 +15,7 @@ class InitialPopulation(Protocol[T]):
             size: The desired number of individuals in the initial population.
 
         Returns:
-            List[T]: A list of newly generated individuals of the specified size.
+            list[T]: A list of newly generated individuals of the specified size.
         """
         ...
 
@@ -35,7 +35,7 @@ def initial_population_fn(fn):
         def __init__(self, func):
             self.func = func
 
-        def __call__(self, size: int) -> List[object]:
+        def __call__(self, size: int) -> list[object]:
             return self.func(size)
 
     return Wrapper(fn)

@@ -1,4 +1,4 @@
-from typing import List, Dict, Optional, Any
+from typing import Any
 from openai import OpenAI
 from llm_evolution.ai.interfaces.llm import LLM
 
@@ -15,7 +15,7 @@ class OpenAILLM(LLM):
         self,
         model: str,
         api_key: str = "sk-no-key-required",
-        base_url: Optional[str] = None,
+        base_url: str | None = None,
         **kwargs: Any,
     ):
         """
@@ -31,7 +31,7 @@ class OpenAILLM(LLM):
         self.model = model
         self.client = OpenAI(api_key=api_key, base_url=base_url, **kwargs)
 
-    def __call__(self, messages: List[Dict[str, str]]) -> str:
+    def __call__(self, messages: list[dict[str, str]]) -> str:
         """
         Generates a text response using the OpenAI chat completion endpoint.
 

@@ -1,4 +1,3 @@
-from typing import List
 from llm_evolution.interfaces.crossover import crossover_fn, Crossover
 from llm_evolution.interfaces.mutation import mutation_fn, Mutation
 from llm_evolution.interfaces.evaluation import evaluation_fn, Evaluation
@@ -15,7 +14,7 @@ from llm_evolution.interfaces.finish_condition import (
 
 def test_crossover_decorator():
     @crossover_fn
-    def my_crossover(parents: List[int]) -> List[int]:
+    def my_crossover(parents: list[int]) -> list[int]:
         return [sum(parents)]
 
     assert isinstance(my_crossover, Crossover)
@@ -54,7 +53,7 @@ def test_evaluation_decorator():
 
 def test_selection_decorator():
     @selection_fn
-    def my_selection(pop: List[int], off: List[int], scores: List[float]) -> List[int]:
+    def my_selection(pop: list[int], off: list[int], scores: list[float]) -> list[int]:
         return [pop[0]]
 
     assert isinstance(my_selection, Selection)
@@ -63,7 +62,7 @@ def test_selection_decorator():
 
 def test_initial_population_decorator():
     @initial_population_fn
-    def my_init(size: int) -> List[int]:
+    def my_init(size: int) -> list[int]:
         return [0] * size
 
     assert isinstance(my_init, InitialPopulation)
@@ -72,7 +71,7 @@ def test_initial_population_decorator():
 
 def test_finish_condition_decorator():
     @finish_condition_fn
-    def my_finish(pop: List[int], gen: int, scores: List[float]) -> bool:
+    def my_finish(pop: list[int], gen: int, scores: list[float]) -> bool:
         return gen > 5
 
     assert isinstance(my_finish, FinishCondition)

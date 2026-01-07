@@ -1,4 +1,4 @@
-from typing import Protocol, TypeVar, List, runtime_checkable
+from typing import Protocol, TypeVar, runtime_checkable
 
 T = TypeVar("T")
 
@@ -7,7 +7,7 @@ T = TypeVar("T")
 class Crossover(Protocol[T]):
     """Protocol for crossover operations in evolutionary algorithms."""
 
-    def __call__(self, parents: List[T]) -> List[T]:
+    def __call__(self, parents: list[T]) -> list[T]:
         """
         Combine parents to create offspring.
 
@@ -15,7 +15,7 @@ class Crossover(Protocol[T]):
             parents: A list of parent individuals selected for reproduction.
 
         Returns:
-            List[T]: A list of new offspring individuals produced by the crossover.
+            list[T]: A list of new offspring individuals produced by the crossover.
         """
         ...
 
@@ -35,7 +35,7 @@ def crossover_fn(fn):
         def __init__(self, func):
             self.func = func
 
-        def __call__(self, parents: List[T]) -> List[T]:
+        def __call__(self, parents: list[T]) -> list[T]:
             return self.func(parents)
 
     return Wrapper(fn)

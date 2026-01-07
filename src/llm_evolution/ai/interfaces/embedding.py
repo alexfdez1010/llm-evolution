@@ -1,11 +1,11 @@
-from typing import Protocol, runtime_checkable, List
+from typing import Protocol, runtime_checkable
 
 
 @runtime_checkable
 class EmbeddingModel(Protocol):
     """Protocol for Embedding Models."""
 
-    def __call__(self, text: str) -> List[float]:
+    def __call__(self, text: str) -> list[float]:
         """
         Generates an embedding vector for the given text.
 
@@ -13,7 +13,7 @@ class EmbeddingModel(Protocol):
             text: The input text to embed.
 
         Returns:
-            List[float]: The embedding vector.
+            list[float]: The embedding vector.
         """
         ...
 
@@ -33,7 +33,7 @@ def embedding_model_fn(fn):
         def __init__(self, func):
             self.func = func
 
-        def __call__(self, text: str) -> List[float]:
+        def __call__(self, text: str) -> list[float]:
             return self.func(text)
 
     return Wrapper(fn)

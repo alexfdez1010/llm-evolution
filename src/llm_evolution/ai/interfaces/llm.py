@@ -1,11 +1,11 @@
-from typing import Protocol, runtime_checkable, List, Dict
+from typing import Protocol, runtime_checkable
 
 
 @runtime_checkable
 class LLM(Protocol):
     """Protocol for Large Language Models."""
 
-    def __call__(self, messages: List[Dict[str, str]]) -> str:
+    def __call__(self, messages: list[dict[str, str]]) -> str:
         """
         Generates a text response from a list of messages.
 
@@ -33,7 +33,7 @@ def llm_fn(fn):
         def __init__(self, func):
             self.func = func
 
-        def __call__(self, messages: List[Dict[str, str]]) -> str:
+        def __call__(self, messages: list[dict[str, str]]) -> str:
             return self.func(messages)
 
     return Wrapper(fn)

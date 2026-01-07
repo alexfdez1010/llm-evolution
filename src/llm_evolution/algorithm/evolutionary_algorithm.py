@@ -1,13 +1,14 @@
 import logging
 import random
-from typing import List, TypeVar, Generic, Optional
 from dataclasses import dataclass
+from typing import Generic, TypeVar
+
 from ..interfaces.crossover import Crossover
+from ..interfaces.evaluation import Evaluation
+from ..interfaces.finish_condition import FinishCondition
+from ..interfaces.initial_population import InitialPopulation
 from ..interfaces.mutation import Mutation
 from ..interfaces.selection import Selection
-from ..interfaces.evaluation import Evaluation
-from ..interfaces.initial_population import InitialPopulation
-from ..interfaces.finish_condition import FinishCondition
 
 T = TypeVar("T")
 
@@ -28,7 +29,7 @@ class EvolutionResult(Generic[T]):
 
     best_instance: T
     best_fitness: float
-    population: List[T]
+    population: list[T]
     generation: int
 
 
@@ -55,8 +56,8 @@ class EvolutionaryAlgorithm(Generic[T]):
         evaluation: Evaluation[T],
         selection: Selection[T],
         finish_condition: FinishCondition[T],
-        crossover: Optional[Crossover[T]] = None,
-        mutation: Optional[Mutation[T]] = None,
+        crossover: Crossover[T] | None = None,
+        mutation: Mutation[T] | None = None,
         population_size: int = 100,
     ):
         """
@@ -115,7 +116,7 @@ class EvolutionaryAlgorithm(Generic[T]):
                     logger.info("Finish condition met at generation %d", generation)
                 break
 
-            offspring: List[T] = []
+            offspring: list[T] = []
 
             if self.crossover and len(population) >= 2:
                 parents_list = [
