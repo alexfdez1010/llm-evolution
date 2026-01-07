@@ -69,7 +69,8 @@ def test_mutation_logic(
     evolution_of_kernels, mock_llm, mock_embedding_model, mock_vector_db
 ):
     program = "original_program"
-    mutated = evolution_of_kernels.mutation(program)
+    mutation_op = evolution_of_kernels.get_mutation()
+    mutated = mutation_op(program)
 
     assert mutated == "Optimized Code"
     mock_embedding_model.assert_called_with(program)
@@ -85,7 +86,8 @@ def test_mutation_logic(
 
 def test_crossover_logic(evolution_of_kernels, mock_llm):
     parents = ["parent1", "parent2"]
-    offspring = evolution_of_kernels.crossover(parents)
+    crossover_op = evolution_of_kernels.get_crossover()
+    offspring = crossover_op(parents)
 
     assert len(offspring) == 1
     assert offspring[0] == "Optimized Code"
@@ -99,5 +101,5 @@ def test_crossover_logic(evolution_of_kernels, mock_llm):
 
 def test_protocols_implementation(evolution_of_kernels):
     # Check if they implement the protocols
-    assert isinstance(evolution_of_kernels.mutation, Mutation)
-    assert isinstance(evolution_of_kernels.crossover, Crossover)
+    assert isinstance(evolution_of_kernels.get_mutation(), Mutation)
+    assert isinstance(evolution_of_kernels.get_crossover(), Crossover)

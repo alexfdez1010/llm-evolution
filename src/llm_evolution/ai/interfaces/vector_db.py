@@ -1,4 +1,4 @@
-from typing import Protocol, List, Dict, Any, runtime_checkable
+from typing import Protocol, Any, runtime_checkable
 
 
 @runtime_checkable
@@ -7,10 +7,10 @@ class VectorDatabase(Protocol):
 
     def add(
         self,
-        ids: List[str],
-        embeddings: List[List[float]],
-        metadatas: List[Dict[str, Any]],
-        documents: List[str],
+        ids: list[str],
+        embeddings: list[list[float]],
+        metadatas: list[dict[str, Any]],
+        documents: list[str],
     ) -> None:
         """
         Add items to the vector database.
@@ -24,8 +24,8 @@ class VectorDatabase(Protocol):
         ...
 
     def query(
-        self, query_embeddings: List[List[float]], n_results: int = 10
-    ) -> List[Dict[str, Any]]:
+        self, query_embeddings: list[list[float]], n_results: int = 10
+    ) -> list[dict[str, Any]]:
         """
         Query the vector database for similar items.
 
@@ -34,6 +34,6 @@ class VectorDatabase(Protocol):
             n_results: Number of results to return.
 
         Returns:
-            List[Dict[str, Any]]: List of query results.
+            list[dict[str, Any]]: List of query results.
         """
         ...

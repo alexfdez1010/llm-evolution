@@ -1,6 +1,5 @@
 import random
 from dataclasses import dataclass, field
-from typing import List, Optional
 
 from llm_evolution.ai.interfaces.llm import LLM
 from llm_evolution.ai.interfaces.embedding import EmbeddingModel
@@ -14,7 +13,7 @@ class ActionableThought:
     """A thought consisting of natural language description and code examples."""
 
     description: str
-    code_examples: List[str]
+    code_examples: list[str]
     id: str = field(default_factory=lambda: str(random.randint(0, 1000000)))
 
 
@@ -38,9 +37,13 @@ class EvolutionOfKernels:
         self.mutation_probability = mutation_probability
         self.n_thoughts = n_thoughts
 
-        # Create protocol-compliant wrappers
-        self.mutation = self._MutationWrapper(self)
-        self.crossover = self._CrossoverWrapper(self)
+    def get_mutation(self) -> Mutation[str]:
+        """Returns a Mutation protocol implementation."""
+        return self._MutationWrapper(self)
+
+    def get_crossover(self) -> Crossover[str]:
+        """Returns a Crossover protocol implementation."""
+        return self._CrossoverWrapper(self)
 
     def ingest_thought(self, thought: ActionableThought) -> None:
         """
@@ -66,7 +69,7 @@ class EvolutionOfKernels:
         def __init__(self, parent: "EvolutionOfKernels"):
             self.parent = parent
 
-        def __call__(self, instance: str) -> Optional[str]:
+        def __call__(self, instance: str) -> str | None:
             if random.random() > self.parent.mutation_probability:
                 return None
 
@@ -107,7 +110,7 @@ class EvolutionOfKernels:
         def __init__(self, parent: "EvolutionOfKernels"):
             self.parent = parent
 
-        def __call__(self, parents: List[str]) -> List[str]:
+        def __call__(self, parents: list[str]) -> list[str]:
             if not parents:
                 return []
 

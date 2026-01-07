@@ -12,6 +12,15 @@ This document provides comprehensive guidance for AI coding assistants working o
 - **Code Quality**: Ruff (formatting & linting)
 - **Type Checking**: basedpyright (optional)
 
+**Typing Conventions:**
+- **Modern Python Typing**: Use built-in types for type hinting (e.g., `list`, `dict`, `tuple`, `set`) instead of importing from `typing`. This is supported in Python 3.9+.
+  - Good: `def process(data: list[str]) -> dict[str, int]: ...`
+  - Bad: `from typing import List, Dict; def process(data: List[str]) -> Dict[str, int]: ...`
+- **Protocols**: Use `typing.Protocol` for structural typing.
+- **Optional**: Use `| None` instead of `Optional`.
+  - Good: `value: str | None`
+  - Bad: `from typing import Optional; value: Optional[str]`
+
 ## Repository Structure
 
 ```

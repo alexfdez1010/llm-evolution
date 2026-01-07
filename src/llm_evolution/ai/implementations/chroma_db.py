@@ -1,4 +1,4 @@
-from typing import List, Dict, Any, Optional, cast
+from typing import Any, cast
 import chromadb
 
 from llm_evolution.ai.interfaces.vector_db import VectorDatabase
@@ -10,7 +10,7 @@ class ChromaDBImplementation(VectorDatabase):
     def __init__(
         self,
         collection_name: str = "evolution_of_kernels",
-        persist_directory: Optional[str] = None,
+        persist_directory: str | None = None,
     ):
         """
         Initialize ChromaDB implementation.
@@ -28,10 +28,10 @@ class ChromaDBImplementation(VectorDatabase):
 
     def add(
         self,
-        ids: List[str],
-        embeddings: List[List[float]],
-        metadatas: List[Dict[str, Any]],
-        documents: List[str],
+        ids: list[str],
+        embeddings: list[list[float]],
+        metadatas: list[dict[str, Any]],
+        documents: list[str],
     ) -> None:
         """Add items to the ChromaDB collection."""
         self.collection.add(
@@ -42,8 +42,8 @@ class ChromaDBImplementation(VectorDatabase):
         )
 
     def query(
-        self, query_embeddings: List[List[float]], n_results: int = 10
-    ) -> List[Dict[str, Any]]:
+        self, query_embeddings: list[list[float]], n_results: int = 10
+    ) -> list[dict[str, Any]]:
         """Query the ChromaDB collection for similar items."""
         results = self.collection.query(
             query_embeddings=cast(Any, query_embeddings), n_results=n_results

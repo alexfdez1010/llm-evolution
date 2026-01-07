@@ -52,8 +52,8 @@ def test_ea_injection_with_evolution_of_kernels():
         evaluation=mock_eval,
         selection=mock_selection,
         finish_condition=mock_finish,
-        mutation=eok.mutation,
-        crossover=eok.crossover,
+        mutation=eok.get_mutation(),
+        crossover=eok.get_crossover(),
         population_size=2,
     )
 
