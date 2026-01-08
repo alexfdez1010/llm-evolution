@@ -274,10 +274,6 @@ api_key = os.getenv("API_KEY")
     ```
 3.  **Commit** your changes
 
-## 👥 Authors
-
-Alejandro Fernández Camello & Claude Sonnet 4.5
-
 ## 🙏 Acknowledgments
 
 - Built with [uv](https://docs.astral.sh/uv/) for fast Python package management
