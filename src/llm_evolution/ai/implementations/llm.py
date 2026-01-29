@@ -1,5 +1,9 @@
-from typing import Any
+import os
+from typing import Any, cast
+
 from openai import OpenAI
+from openai.types.chat.chat_completion_message_param import ChatCompletionMessageParam
+
 from llm_evolution.ai.interfaces.llm import LLM, Message
 
 
@@ -43,6 +47,48 @@ class OpenAILLM(LLM):
         """
         response = self.client.chat.completions.create(
             model=self.model,
-            messages=messages,  # type: ignore
+            messages=messages_to_openai(messages),
         )
         return response.choices[0].message.content or ""
+
+
+def messages_to_openai(messages: list[Message]) -> list[ChatCompletionMessageParam]:
+    """
+    Converts a list of Message objects to a list of OpenAI chat completion message parameters.
+
+    Args:
+        messages: A list of message objects.
+
+    Returns:
+        list[ChatCompletionMessageParam]: A list of OpenAI chat completion message parameters.
+    """
+    return [
+        cast(
+            ChatCompletionMessageParam,
+            {"role": message.role, "content": message.content},
+        )
+        for message in messages
+    ]
+
+
+def open_router_model(model: str) -> LLM:
+    """
+    Returns an OpenAI LLM instance with the specified model for the OpenRouter API.
+
+    Args:
+        model: The name of the model to use.
+
+    Returns:
+        LLM: An OpenAI LLM instance with the specified model for the OpenRouter API.
+    """
+    from dotenv import load_dotenv
+
+    load_dotenv()
+
+    api_key = os.getenv("OPENROUTER_API_KEY")
+
+    if not api_key:
+        raise ValueError("OPENROUTER_API_KEY not found in environment variables")
+
+    api_url = "https://openrouter.ai/api/v1"
+    return OpenAILLM(model, api_key=api_key, base_url=api_url)

@@ -4,7 +4,7 @@ from typing import Literal, Protocol, runtime_checkable
 
 @dataclass
 class Message:
-    role: Literal['user', 'assistant', 'system', 'tool']
+    role: Literal["user", "assistant", "system", "tool"]
     content: str
 
 
