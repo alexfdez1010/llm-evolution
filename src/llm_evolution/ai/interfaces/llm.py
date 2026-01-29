@@ -1,16 +1,23 @@
-from typing import Protocol, runtime_checkable
+from dataclasses import dataclass
+from typing import Literal, Protocol, runtime_checkable
+
+
+@dataclass
+class Message:
+    role: Literal['user', 'assistant', 'system', 'tool']
+    content: str
 
 
 @runtime_checkable
 class LLM(Protocol):
     """Protocol for Large Language Models."""
 
-    def __call__(self, messages: list[dict[str, str]]) -> str:
+    def __call__(self, messages: list[Message]) -> str:
         """
         Generates a text response from a list of messages.
 
         Args:
-            messages: A list of message dictionaries (e.g., [{"role": "user", "content": "..."}]).
+            messages: A list of message objects.
 
         Returns:
             str: The generated text response.
@@ -33,7 +40,7 @@ def llm_fn(fn):
         def __init__(self, func):
             self.func = func
 
-        def __call__(self, messages: list[dict[str, str]]) -> str:
+        def __call__(self, messages: list[Message]) -> str:
             return self.func(messages)
 
     return Wrapper(fn)

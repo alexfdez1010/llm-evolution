@@ -118,14 +118,14 @@ print(f"Best instance: {result.best_instance} with fitness {result.best_fitness}
 
 The `EvolutionaryAlgorithm` orchestrates a standard evolutionary cycle:
 
-1.  **Initialization**: The `initial_population` strategy generates an initial set of `population_size` individuals.
-2.  **Evaluation**: Each individual in the current population is evaluated using the `evaluation` strategy to determine its fitness.
-3.  **Check Stop Condition**: The `finish_condition` is checked. If it returns `True`, the evolution stops.
-4.  **Reproduction**:
+1. **Initialization**: The `initial_population` strategy generates an initial set of `population_size` individuals.
+2. **Evaluation**: Each individual in the current population is evaluated using the `evaluation` strategy to determine its fitness.
+3. **Check Stop Condition**: The `finish_condition` is checked. If it returns `True`, the evolution stops.
+4. **Reproduction**:
     - **Crossover**: If a `crossover` strategy is provided, pairs of parents are selected and combined to create offspring.
     - **Mutation**: If a `mutation` strategy is provided, random variations are applied to a subset of the population and offspring.
-5.  **Selection**: The `selection` strategy chooses which individuals from the current population and the new offspring will survive to the next generation.
-6.  **Iteration**: Steps 2-5 are repeated until the stop condition is met.
+5. **Selection**: The `selection` strategy chooses which individuals from the current population and the new offspring will survive to the next generation.
+6. **Iteration**: Steps 2-5 are repeated until the stop condition is met.
 
 The library's use of Generics (`T`) ensures that you can evolve any type of object, from simple numbers to complex LLM-generated code or system configurations.
 
@@ -193,31 +193,9 @@ uv sync
 uv remove <package-name>
 ```
 
-## 🎨 Code Quality
-
-### Formatting
-
-```bash
-# Auto-format all code
-uv run ruff format
-
-# Check formatting without changes
-uv run ruff format --check
-```
-
-### Linting
-
-```bash
-# Run linter
-uv run ruff check
-
-# Auto-fix issues where possible
-uv run ruff check --fix
-```
-
 ## 📁 Project Structure
 
-```
+```text
 .
 ├── src/
 │   └── llm_evolution/            # Main package source code
@@ -239,6 +217,7 @@ uv run ruff check --fix
 ### pyproject.toml
 
 The `pyproject.toml` file contains:
+
 - Project metadata (name, version, description)
 - Python version requirement (>=3.12)
 - Dependencies list
@@ -267,12 +246,14 @@ api_key = os.getenv("API_KEY")
 
 ## 🚀 Development Workflow
 
-1.  **Make changes** to code in `src/llm_evolution/`
-2.  **Verify changes** using the `Makefile`:
+1. **Make changes** to code in `src/llm_evolution/`
+2. **Verify changes** using the `Makefile`:
+
     ```bash
     make pre-commit
     ```
-3.  **Commit** your changes
+
+3. **Commit** your changes
 
 ## 🙏 Acknowledgments
 
