@@ -1,6 +1,6 @@
 from typing import Any
 from openai import OpenAI
-from llm_evolution.ai.interfaces.llm import LLM
+from llm_evolution.ai.interfaces.llm import LLM, Message
 
 
 class OpenAILLM(LLM):
@@ -31,12 +31,12 @@ class OpenAILLM(LLM):
         self.model = model
         self.client = OpenAI(api_key=api_key, base_url=base_url, **kwargs)
 
-    def __call__(self, messages: list[dict[str, str]]) -> str:
+    def __call__(self, messages: list[Message]) -> str:
         """
         Generates a text response using the OpenAI chat completion endpoint.
 
         Args:
-            messages: A list of message dictionaries.
+            messages: A list of message objects.
 
         Returns:
             str: The generated response text.
