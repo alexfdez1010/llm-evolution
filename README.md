@@ -207,8 +207,6 @@ load_dotenv()
 api_key = os.getenv("API_KEY")
 ```
 
-## 🙏 Acknowledgments
+## 📝 License
 
-- Built with [uv](https://docs.astral.sh/uv/) for fast Python package management
-- Code quality powered by [Ruff](https://github.com/astral-sh/ruff)
-- Testing with [pytest](https://pytest.org/)
+MIT License. See [LICENSE](LICENSE).
