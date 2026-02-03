@@ -173,15 +173,20 @@ uv remove <package-name>
 ├── src/
 │   └── llm_evolution/            # Main package source code
 │       ├── __init__.py
+│       ├── ai/                    # LLM/embedding interfaces + implementations
+│       ├── algorithm/             # Evolutionary algorithm logic
+│       ├── implementations/       # Concrete evolution implementations
+│       ├── interfaces/            # Evolution interfaces (mutation, crossover, etc.)
 │       └── version.py
 ├── tests/
 │   ├── unit/                     # Unit tests with mocks
 │   └── integration/              # Integration tests (real APIs/services)
 ├── .python-version               # Python version (3.12)
+├── AGENTS.md                     # AI coding assistant guidelines
 ├── pyproject.toml                # Project metadata & dependencies
 ├── uv.lock                       # Locked dependencies (DO NOT edit manually)
 ├── .gitignore                    # Git ignore patterns
-├── AGENTS.md                     # AI coding assistant guidelines
+├── LICENSE                       # MIT license
 └── README.md                     # This file
 ```
 
