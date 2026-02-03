@@ -8,9 +8,7 @@ A professional-grade Python library combining Large Language Models (LLMs) with 
 
 - **Library-first layout**: `src/`-based packaging for reliable imports
 - **Modern Python**: Python 3.12+
-- **Testing ready**: pytest with unit + integration structure
-- **Code quality**: Ruff (formatting + linting)
-- **Type checking**: Optional basedpyright configuration
+- **Protocol-based design**: swap strategies via clear interfaces
 
 ## 📋 Requirements
 
@@ -25,7 +23,17 @@ A professional-grade Python library combining Large Language Models (LLMs) with 
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-### Clone and Setup
+### Install as a dependency (recommended)
+
+```bash
+# Add this library from Git (PEP 508 URL)
+uv add "llm-evolution @ git+https://github.com/alexfdez1010/llm-evolution.git"
+
+# Add from a branch or tag
+uv add "llm-evolution @ git+https://github.com/alexfdez1010/llm-evolution.git@main"
+```
+
+### Install locally (if you are working from a checkout)
 
 ```bash
 # Clone the repository
@@ -35,18 +43,8 @@ cd llm-evolution
 # Sync dependencies (creates .venv and installs packages)
 uv sync
 
-# Install dev tools (pytest/ruff)
-uv sync --extra dev
-```
-
-### Install the library locally
-
-```bash
-# Install in editable mode (recommended for development)
+# Install in editable mode
 uv pip install -e .
-
-# Or install with dev extras
-uv pip install -e ".[dev]"
 ```
 
 ## 🎯 Usage
@@ -69,7 +67,6 @@ The library is built around several key interfaces (Protocols):
 Here is how you can set up and run a simple evolutionary algorithm:
 
 ```python
-from typing import List
 import random
 from llm_evolution.algorithm.evolutionary_algorithm import EvolutionaryAlgorithm
 from llm_evolution.interfaces.initial_population import initial_population_fn
@@ -79,7 +76,7 @@ from llm_evolution.interfaces.finish_condition import finish_condition_fn
 
 # 1. Define your population initialization
 @initial_population_fn
-def my_initial_pop(size: int) -> List[int]:
+def my_initial_pop(size: int) -> list[int]:
     return [random.randint(0, 100) for _ in range(size)]
 
 # 2. Define how to evaluate individuals (higher is better)
@@ -129,39 +126,12 @@ The `EvolutionaryAlgorithm` orchestrates a standard evolutionary cycle:
 
 The library's use of Generics (`T`) ensures that you can evolve any type of object, from simple numbers to complex LLM-generated code or system configurations.
 
-## 🧪 Testing
-
-The repository separates unit and integration tests. We use a `Makefile` to simplify common development tasks.
-
-### Running Tests
-
-```bash
-# Run all tests
-make test
-
-# Or run manually with uv
-uv run pytest
-```
-
-## 🎨 Code Quality
-
-We use [Ruff](https://github.com/astral-sh/ruff) for lightning-fast linting and formatting.
-
-```bash
-# Format and lint code
-make format
-make lint
-
-# Run all checks (format, lint, and test)
-make all
-```
-
 ## 📦 Dependency Management
 
-### Adding Dependencies
+### Adding Dependencies (uv)
 
 ```bash
-# Add runtime dependency
+# Add a runtime dependency
 uv add <package-name>
 
 # Add this library from Git (PEP 508 URL)
@@ -170,14 +140,11 @@ uv add "llm-evolution @ git+https://github.com/alexfdez1010/llm-evolution.git"
 # Add from a branch or tag
 uv add "llm-evolution @ git+https://github.com/alexfdez1010/llm-evolution.git@main"
 
-# Add development dependency
-uv add --dev <package-name>
-
 # Example: Add requests library
 uv add requests
 
-# Example: Add pytest plugin
-uv add --dev pytest-cov
+# Example: Add rich
+uv add rich
 ```
 
 ### Updating Dependencies
@@ -220,16 +187,6 @@ uv remove <package-name>
 
 ## 🔧 Configuration
 
-### pyproject.toml
-
-The `pyproject.toml` file contains:
-
-- Project metadata (name, version, description)
-- Python version requirement (>=3.12)
-- Dependencies list
-- Build system configuration (Hatchling)
-- Tool configurations (pytest, basedpyright)
-
 ### Environment Variables
 
 For sensitive configuration, create a `.env` file (already in `.gitignore`):
@@ -249,17 +206,6 @@ import os
 load_dotenv()
 api_key = os.getenv("API_KEY")
 ```
-
-## 🚀 Development Workflow
-
-1. **Make changes** to code in `src/llm_evolution/`
-2. **Verify changes** using the `Makefile`:
-
-    ```bash
-    make pre-commit
-    ```
-
-3. **Commit** your changes
 
 ## 🙏 Acknowledgments
 
