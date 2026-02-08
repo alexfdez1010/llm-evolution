@@ -86,13 +86,13 @@ class EvolutionaryAlgorithm(Generic[T]):
 
         Args:
             log: Whether to enable logging of the evolutionary process.
+                 Note: This flag controls whether the algorithm emits log messages.
+                 You must configure the logging system (e.g., logging.basicConfig)
+                 to actually see the output.
 
         Returns:
             EvolutionResult: The result containing the best individual and final population.
         """
-        if log:
-            logging.basicConfig(level=logging.INFO)
-
         if log:
             logger.info(
                 "Starting evolutionary algorithm with population size %d",
