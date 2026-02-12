@@ -93,7 +93,8 @@ class EvolutionaryAlgorithm(Generic[T]):
         Evaluate individuals using the cache to avoid redundant computations.
 
         Only individuals not already in the cache are evaluated. Results are
-        stored in the cache for future lookups.
+        stored in the cache for future lookups. Parallel execution is used
+        for individuals not in the cache.
 
         Args:
             individuals: The list of individuals to evaluate.
@@ -101,12 +102,44 @@ class EvolutionaryAlgorithm(Generic[T]):
         Returns:
             list[float]: The fitness scores in the same order as the input.
         """
-        results: list[float] = []
-        for ind in individuals:
+        results: list[float] = [0.0] * len(individuals)
+        to_evaluate_map: dict[int, list[int]] = {}
+
+        for i, ind in enumerate(individuals):
             obj_id = id(ind)
-            if obj_id not in self._fitness_cache:
-                self._fitness_cache[obj_id] = self.evaluation(ind)
-            results.append(self._fitness_cache[obj_id])
+            if obj_id in self._fitness_cache:
+                results[i] = self._fitness_cache[obj_id]
+            else:
+                if obj_id not in to_evaluate_map:
+                    to_evaluate_map[obj_id] = []
+                to_evaluate_map[obj_id].append(i)
+
+        if not to_evaluate_map:
+            return results
+
+        unique_ids = list(to_evaluate_map.keys())
+        unique_instances = [individuals[to_evaluate_map[obj_id][0]] for obj_id in unique_ids]
+
+        try:
+            executor = get_reusable_executor(max_workers=self.max_workers)
+            evaluated_scores = list(executor.map(self.evaluation, unique_instances))
+
+            for obj_id, score in zip(unique_ids, evaluated_scores):
+                self._fitness_cache[obj_id] = score
+                for idx in to_evaluate_map[obj_id]:
+                    results[idx] = score
+
+        except PicklingError:
+            logger.warning(
+                "Evaluation callable could not be pickled. Falling back to sequential execution."
+            )
+            for obj_id, indices in to_evaluate_map.items():
+                ind = individuals[indices[0]]
+                score = self.evaluation(ind)
+                self._fitness_cache[obj_id] = score
+                for idx in indices:
+                    results[idx] = score
+
         return results
 
     def _prune_cache(self, alive: list[T]) -> None:
