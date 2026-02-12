@@ -1,7 +1,7 @@
 import random
 from dataclasses import dataclass, field
 
-from llm_evolution.ai.interfaces.llm import LLM
+from llm_evolution.ai.interfaces.llm import LLM, Message
 from llm_evolution.ai.interfaces.embedding import EmbeddingModel
 from llm_evolution.ai.interfaces.vector_db import VectorDatabase
 from llm_evolution.interfaces.mutation import Mutation
@@ -93,14 +93,14 @@ class EvolutionOfKernels:
 
             # 3. Prompt LLM to mutate the program using the thoughts
             prompt = [
-                {
-                    "role": "system",
-                    "content": "You are an expert in kernel optimization. Use the provided optimization thoughts to improve the given program.",
-                },
-                {
-                    "role": "user",
-                    "content": f"Original Program:\n{instance}\n\nOptimization Thoughts:\n{thoughts_context}\n\nPlease provide the mutated and optimized version of the program. Return ONLY the code.",
-                },
+                Message(
+                    role="system",
+                    content="You are an expert in kernel optimization. Use the provided optimization thoughts to improve the given program.",
+                ),
+                Message(
+                    role="user",
+                    content=f"Original Program:\n{instance}\n\nOptimization Thoughts:\n{thoughts_context}\n\nPlease provide the mutated and optimized version of the program. Return ONLY the code.",
+                ),
             ]
 
             mutated_program = self.parent.llm(prompt)
@@ -119,14 +119,14 @@ class EvolutionOfKernels:
             )
 
             prompt = [
-                {
-                    "role": "system",
-                    "content": "You are an expert in kernel optimization. Combine the best features of the following parent programs into a single optimized offspring program.",
-                },
-                {
-                    "role": "user",
-                    "content": f"{parents_context}\n\nPlease provide the combined and optimized version of the program. Return ONLY the code.",
-                },
+                Message(
+                    role="system",
+                    content="You are an expert in kernel optimization. Combine the best features of the following parent programs into a single optimized offspring program.",
+                ),
+                Message(
+                    role="user",
+                    content=f"{parents_context}\n\nPlease provide the combined and optimized version of the program. Return ONLY the code.",
+                ),
             ]
 
             offspring = self.parent.llm(prompt)

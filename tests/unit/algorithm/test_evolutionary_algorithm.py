@@ -281,7 +281,7 @@ class TestParallelCrossoverAndMutation:
 
         result = ea.run()
         # No mutation succeeded, population should remain unchanged
-        assert sorted(result.population) == [0, 1, 2, 3, 4]  # type: ignore[type-var]
+        assert sorted(result.population) == [0, 1, 2, 3, 4]
 
     def test_parallel_with_closure_functions(self):
         """Closures (non-serializable with pickle) should work via loky/cloudpickle."""

@@ -79,9 +79,9 @@ def test_mutation_logic(
 
     # Verify prompt content
     prompt = mock_llm.call_args[0][0]
-    assert "original_program" in prompt[1]["content"]
-    assert "T1" in prompt[1]["content"]
-    assert "ex1" in prompt[1]["content"]
+    assert "original_program" in prompt[1].content
+    assert "T1" in prompt[1].content
+    assert "ex1" in prompt[1].content
 
 
 def test_crossover_logic(evolution_of_kernels, mock_llm):
@@ -95,8 +95,8 @@ def test_crossover_logic(evolution_of_kernels, mock_llm):
 
     # Verify prompt content
     prompt = mock_llm.call_args[0][0]
-    assert "parent1" in prompt[1]["content"]
-    assert "parent2" in prompt[1]["content"]
+    assert "parent1" in prompt[1].content
+    assert "parent2" in prompt[1].content
 
 
 def test_protocols_implementation(evolution_of_kernels):

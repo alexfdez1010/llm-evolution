@@ -1,3 +1,4 @@
+from collections.abc import Callable
 from typing import Protocol, TypeVar, runtime_checkable
 
 T = TypeVar("T")
@@ -24,7 +25,9 @@ class FinishCondition(Protocol[T]):
         ...
 
 
-def finish_condition_fn(fn):
+def finish_condition_fn(
+    fn: Callable[[list[T], int, list[float]], bool],
+) -> FinishCondition[T]:
     """
     Decorator to convert a function into a FinishCondition protocol implementation.
 
@@ -32,11 +35,11 @@ def finish_condition_fn(fn):
         fn: A function that takes population, generation, and fitness scores and returns a boolean.
 
     Returns:
-        Wrapper: A class implementing the FinishCondition protocol.
+        FinishCondition[T]: An object implementing the FinishCondition protocol.
     """
 
     class Wrapper:
-        def __init__(self, func):
+        def __init__(self, func: Callable[[list[T], int, list[float]], bool]):
             self.func = func
 
         def __call__(
@@ -44,4 +47,4 @@ def finish_condition_fn(fn):
         ) -> bool:
             return self.func(population, generation, fitness_scores)
 
-    return Wrapper(fn)
+    return Wrapper(fn)  # type: ignore[return-value]

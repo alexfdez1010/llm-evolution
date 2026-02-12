@@ -1,14 +1,14 @@
-from llm_evolution.ai.interfaces.llm import llm_fn, LLM
+from llm_evolution.ai.interfaces.llm import llm_fn, LLM, Message
 from llm_evolution.ai.interfaces.embedding import embedding_model_fn, EmbeddingModel
 
 
 def test_llm_decorator():
     @llm_fn
-    def my_llm(messages: list[dict[str, str]]) -> str:
+    def my_llm(messages: list[Message]) -> str:
         return "response"
 
     assert isinstance(my_llm, LLM)
-    assert my_llm([{"role": "user", "content": "hi"}]) == "response"
+    assert my_llm([Message(role="user", content="hi")]) == "response"
 
 
 def test_embedding_decorator():

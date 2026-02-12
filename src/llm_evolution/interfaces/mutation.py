@@ -1,3 +1,4 @@
+from collections.abc import Callable
 from typing import Protocol, TypeVar, runtime_checkable
 
 T = TypeVar("T")
@@ -21,7 +22,7 @@ class Mutation(Protocol[T]):
         ...
 
 
-def mutation_fn(fn):
+def mutation_fn(fn: Callable[[T], T | None]) -> Mutation[T]:
     """
     Decorator to convert a function into a Mutation protocol implementation.
 
@@ -29,14 +30,14 @@ def mutation_fn(fn):
         fn: A function that takes an instance and returns a mutated instance or None.
 
     Returns:
-        Wrapper: A class implementing the Mutation protocol.
+        Mutation[T]: An object implementing the Mutation protocol.
     """
 
     class Wrapper:
-        def __init__(self, func):
+        def __init__(self, func: Callable[[T], T | None]):
             self.func = func
 
         def __call__(self, instance: T) -> T | None:
             return self.func(instance)
 
-    return Wrapper(fn)
+    return Wrapper(fn)  # type: ignore[return-value]

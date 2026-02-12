@@ -1,6 +1,8 @@
+from collections.abc import Callable
 from typing import Protocol, TypeVar, runtime_checkable
 
 T = TypeVar("T", contravariant=True)
+T_fn = TypeVar("T_fn")
 
 
 @runtime_checkable
@@ -20,7 +22,7 @@ class Evaluation(Protocol[T]):
         ...
 
 
-def evaluation_fn(fn):
+def evaluation_fn(fn: Callable[[T_fn], float]) -> Evaluation[T_fn]:
     """
     Decorator to convert a function into an Evaluation protocol implementation.
 
@@ -28,14 +30,14 @@ def evaluation_fn(fn):
         fn: A function that takes an instance and returns its fitness score.
 
     Returns:
-        Wrapper: A class implementing the Evaluation protocol.
+        Evaluation[T]: An object implementing the Evaluation protocol.
     """
 
     class Wrapper:
-        def __init__(self, func):
+        def __init__(self, func: Callable[[T_fn], float]):
             self.func = func
 
-        def __call__(self, instance: object) -> float:
+        def __call__(self, instance: T_fn) -> float:
             return self.func(instance)
 
-    return Wrapper(fn)
+    return Wrapper(fn)  # type: ignore[return-value]

@@ -1,3 +1,4 @@
+from collections.abc import Callable
 from typing import Protocol, TypeVar, runtime_checkable
 
 T = TypeVar("T")
@@ -24,7 +25,9 @@ class Selection(Protocol[T]):
         ...
 
 
-def selection_fn(fn):
+def selection_fn(
+    fn: Callable[[list[T], list[T], list[float]], list[T]],
+) -> Selection[T]:
     """
     Decorator to convert a function into a Selection protocol implementation.
 
@@ -32,11 +35,11 @@ def selection_fn(fn):
         fn: A function that takes population, offspring, and fitness scores and returns survivors.
 
     Returns:
-        Wrapper: A class implementing the Selection protocol.
+        Selection[T]: An object implementing the Selection protocol.
     """
 
     class Wrapper:
-        def __init__(self, func):
+        def __init__(self, func: Callable[[list[T], list[T], list[float]], list[T]]):
             self.func = func
 
         def __call__(
@@ -44,4 +47,4 @@ def selection_fn(fn):
         ) -> list[T]:
             return self.func(population, offspring, fitness_scores)
 
-    return Wrapper(fn)
+    return Wrapper(fn)  # type: ignore[return-value]

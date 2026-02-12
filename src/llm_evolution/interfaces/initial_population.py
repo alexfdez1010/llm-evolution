@@ -1,3 +1,4 @@
+from collections.abc import Callable
 from typing import Protocol, TypeVar, runtime_checkable
 
 T = TypeVar("T")
@@ -20,7 +21,7 @@ class InitialPopulation(Protocol[T]):
         ...
 
 
-def initial_population_fn(fn):
+def initial_population_fn(fn: Callable[[int], list[T]]) -> InitialPopulation[T]:
     """
     Decorator to convert a function into an InitialPopulation protocol implementation.
 
@@ -28,14 +29,14 @@ def initial_population_fn(fn):
         fn: A function that takes a size and returns an initial population.
 
     Returns:
-        Wrapper: A class implementing the InitialPopulation protocol.
+        InitialPopulation[T]: An object implementing the InitialPopulation protocol.
     """
 
     class Wrapper:
-        def __init__(self, func):
+        def __init__(self, func: Callable[[int], list[T]]):
             self.func = func
 
-        def __call__(self, size: int) -> list[object]:
+        def __call__(self, size: int) -> list[T]:
             return self.func(size)
 
-    return Wrapper(fn)
+    return Wrapper(fn)  # type: ignore[return-value]
