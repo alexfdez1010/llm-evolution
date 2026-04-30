@@ -15,7 +15,7 @@ from llm_evolution.interfaces.validation import (
     AlwaysValidValidator,
     InstanceValidator,
 )
-from llm_evolution.search_replace import (
+from llm_evolution.implementations.utils.search_replace import (
     apply_search_replace,
     extract_search_replace,
     search_replace_error_feedback,

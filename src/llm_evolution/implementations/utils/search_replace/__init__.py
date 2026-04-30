@@ -5,12 +5,14 @@ search/replace blocks.  Useful for evolving any text artefact (code,
 config, prose) where exact-string edits are easier than diffs.
 """
 
-from llm_evolution.search_replace.apply import apply_search_replace
-from llm_evolution.search_replace.blocks import (
+from llm_evolution.implementations.utils.search_replace.apply import (
+    apply_search_replace,
+)
+from llm_evolution.implementations.utils.search_replace.blocks import (
     SearchReplaceBlock,
     extract_search_replace,
 )
-from llm_evolution.search_replace.prompts import (
+from llm_evolution.implementations.utils.search_replace.prompts import (
     number_lines,
     search_replace_error_feedback,
     search_replace_format_example,

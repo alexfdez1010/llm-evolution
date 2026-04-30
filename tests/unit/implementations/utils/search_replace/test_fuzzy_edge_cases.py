@@ -8,7 +8,7 @@ content) must still raise.
 
 import pytest
 
-from llm_evolution.search_replace import (
+from llm_evolution.implementations.utils.search_replace import (
     SearchReplaceBlock,
     apply_search_replace,
 )

@@ -175,6 +175,7 @@ See [docs/uv-workflow.md](docs/uv-workflow.md) for the full workflow.
 │       ├── ai/                    # LLM/embedding interfaces + implementations
 │       ├── algorithm/             # Evolutionary algorithm logic
 │       ├── implementations/       # Concrete evolution implementations
+│       │   └── utils/             # Shared helpers (e.g. search/replace edits)
 │       ├── interfaces/            # Evolution interfaces (mutation, crossover, etc.)
 │       └── version.py
 ├── tests/

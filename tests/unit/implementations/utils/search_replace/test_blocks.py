@@ -1,6 +1,6 @@
 """Unit tests for search_replace block extraction."""
 
-from llm_evolution.search_replace import extract_search_replace
+from llm_evolution.implementations.utils.search_replace import extract_search_replace
 
 
 class TestExtractSearchReplace:

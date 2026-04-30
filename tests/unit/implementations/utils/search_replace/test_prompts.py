@@ -1,6 +1,6 @@
 """Unit tests for prompt helpers in search_replace."""
 
-from llm_evolution.search_replace import (
+from llm_evolution.implementations.utils.search_replace import (
     number_lines,
     search_replace_error_feedback,
     search_replace_format_example,

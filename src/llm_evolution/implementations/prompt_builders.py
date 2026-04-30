@@ -13,7 +13,7 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 
 from llm_evolution.ai.interfaces.llm import Message
-from llm_evolution.search_replace import (
+from llm_evolution.implementations.utils.search_replace import (
     number_lines,
     search_replace_format_example,
 )

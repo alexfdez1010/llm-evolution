@@ -4,8 +4,12 @@ from __future__ import annotations
 
 import logging
 
-from llm_evolution.search_replace._fuzzy import fuzzy_search_replace
-from llm_evolution.search_replace.blocks import SearchReplaceBlock
+from llm_evolution.implementations.utils.search_replace._fuzzy import (
+    fuzzy_search_replace,
+)
+from llm_evolution.implementations.utils.search_replace.blocks import (
+    SearchReplaceBlock,
+)
 
 logger = logging.getLogger(__name__)
 
