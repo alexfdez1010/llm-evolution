@@ -118,7 +118,9 @@ class EvolutionaryAlgorithm(Generic[T]):
             return results
 
         unique_ids = list(to_evaluate_map.keys())
-        unique_instances = [individuals[to_evaluate_map[obj_id][0]] for obj_id in unique_ids]
+        unique_instances = [
+            individuals[to_evaluate_map[obj_id][0]] for obj_id in unique_ids
+        ]
 
         try:
             executor = get_reusable_executor(max_workers=self.max_workers)
