@@ -82,6 +82,7 @@ class TestEvaluationCaching:
             selection=select,
             finish_condition=finish,
             population_size=5,
+            max_workers=1,
         )
 
         ea.run()
@@ -117,6 +118,7 @@ class TestEvaluationCaching:
             crossover=basic_components["crossover"],
             mutation=basic_components["mutation"],
             population_size=4,
+            max_workers=1,
         )
 
         result = ea.run()
@@ -150,6 +152,7 @@ class TestEvaluationCaching:
             selection=basic_components["selection"],
             finish_condition=finish,
             population_size=3,
+            max_workers=1,
         )
 
         ea.run()

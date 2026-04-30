@@ -122,6 +122,14 @@ class EvolutionaryAlgorithm(Generic[T]):
             individuals[to_evaluate_map[obj_id][0]] for obj_id in unique_ids
         ]
 
+        if self.max_workers == 1:
+            for obj_id, ind in zip(unique_ids, unique_instances):
+                score = self.evaluation(ind)
+                self._fitness_cache[obj_id] = score
+                for idx in to_evaluate_map[obj_id]:
+                    results[idx] = score
+            return results
+
         try:
             executor = get_reusable_executor(max_workers=self.max_workers)
             evaluated_scores = list(executor.map(self.evaluation, unique_instances))
@@ -168,6 +176,8 @@ class EvolutionaryAlgorithm(Generic[T]):
         Returns:
             list[T]: The combined offspring from all crossover operations.
         """
+        if self.max_workers == 1:
+            return self._sequential_crossover(parents_list)
         try:
             executor = get_reusable_executor(max_workers=self.max_workers)
             futures = [
@@ -211,6 +221,8 @@ class EvolutionaryAlgorithm(Generic[T]):
         Returns:
             list[T]: The list of successfully mutated individuals (non-None results).
         """
+        if self.max_workers == 1:
+            return self._sequential_mutation(to_mutate)
         try:
             executor = get_reusable_executor(max_workers=self.max_workers)
             futures = [executor.submit(self.mutation, ind) for ind in to_mutate]
