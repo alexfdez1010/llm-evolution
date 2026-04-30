@@ -13,38 +13,43 @@ A professional-grade Python library combining Large Language Models (LLMs) with 
 ## 📋 Requirements
 
 - Python 3.12+
-- [uv](https://docs.astral.sh/uv/) package manager
 
 ## 🛠️ Installation
 
-### Install uv (if not already installed)
+The library is published on [PyPI](https://pypi.org/project/llm-evolution/) and can be installed with any Python package manager.
+
+### Using uv
 
 ```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
+# Add to a project
+uv add llm-evolution
+
+# Or install into the active environment
+uv pip install llm-evolution
 ```
 
-### Install as a dependency (recommended)
+### Using pip
 
 ```bash
-# Add this library from Git (PEP 508 URL)
-uv add "llm-evolution @ git+https://github.com/alexfdez1010/llm-evolution.git"
+pip install llm-evolution
+```
 
-# Add from a branch or tag
+### Using pipx, poetry, pdm, etc.
+
+```bash
+poetry add llm-evolution
+pdm add llm-evolution
+pipx install llm-evolution
+```
+
+### Install the latest unreleased commit
+
+```bash
+# uv
 uv add "llm-evolution @ git+https://github.com/alexfdez1010/llm-evolution.git@main"
-```
 
-### Install locally (if you are working from a checkout)
-
-```bash
-# Clone the repository
-git clone https://github.com/alexfdez1010/llm-evolution
-cd llm-evolution
-
-# Sync dependencies (creates .venv and installs packages)
-uv sync
-
-# Install in editable mode
-uv pip install -e .
+# pip
+pip install "git+https://github.com/alexfdez1010/llm-evolution.git@main"
 ```
 
 ## 🎯 Usage
@@ -126,45 +131,39 @@ The `EvolutionaryAlgorithm` orchestrates a standard evolutionary cycle:
 
 The library's use of Generics (`T`) ensures that you can evolve any type of object, from simple numbers to complex LLM-generated code or system configurations.
 
-## 📦 Dependency Management
+## 🧑‍💻 Development
 
-### Adding Dependencies (uv)
+Set up a local checkout for contributing or running the test suite. The project uses [uv](https://docs.astral.sh/uv/) for environment and dependency management.
 
-```bash
-# Add a runtime dependency
-uv add <package-name>
-
-# Add this library from Git (PEP 508 URL)
-uv add "llm-evolution @ git+https://github.com/alexfdez1010/llm-evolution.git"
-
-# Add from a branch or tag
-uv add "llm-evolution @ git+https://github.com/alexfdez1010/llm-evolution.git@main"
-
-# Example: Add requests library
-uv add requests
-
-# Example: Add rich
-uv add rich
-```
-
-### Updating Dependencies
+### Setup
 
 ```bash
-# Update a specific package
-uv lock --upgrade-package <package-name>
-
-# Update all packages
-uv lock --upgrade
-
-# Sync after updating
-uv sync
+git clone https://github.com/alexfdez1010/llm-evolution
+cd llm-evolution
+uv sync --extra dev
 ```
 
-### Removing Dependencies
+### Common commands
 
 ```bash
-uv remove <package-name>
+uv run pytest                    # all tests
+uv run pytest tests/unit         # unit only
+uv run pytest tests/integration  # integration only
+uv run ruff format               # format
+uv run ruff check                # lint
 ```
+
+### Managing dependencies
+
+```bash
+uv add <package>                 # add runtime dep
+uv remove <package>              # remove dep
+uv lock --upgrade                # upgrade all deps
+uv lock --upgrade-package <pkg>  # upgrade one
+uv sync                          # apply lockfile
+```
+
+See [docs/uv-workflow.md](docs/uv-workflow.md) for the full workflow.
 
 ## 📁 Project Structure
 
