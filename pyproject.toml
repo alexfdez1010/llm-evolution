@@ -4,12 +4,41 @@ version = "0.1.0"
 description = "LLM + evolutionary algorithms to optimize programs in multiple languages and domains"
 readme = "README.md"
 requires-python = ">=3.12"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Alejandro Fernández Camello", email = "alejandrofernandezcamello@gmail.com" },
+]
+keywords = [
+    "llm",
+    "evolutionary-algorithm",
+    "genetic-programming",
+    "optimization",
+    "ai",
+    "code-generation",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
 dependencies = [
     "chromadb>=1.4.0",
     "loky>=3.5.6",
     "openai>=2.14.0",
     "python-dotenv>=1.1.1",
 ]
+
+[project.urls]
+Homepage = "https://github.com/alexfdez1010/llm-evolution"
+Repository = "https://github.com/alexfdez1010/llm-evolution"
+Issues = "https://github.com/alexfdez1010/llm-evolution/issues"
 
 [project.optional-dependencies]
 dev = [
