@@ -21,6 +21,8 @@ jobs:
         run: uv run ruff format --check
       - name: Unit tests
         run: uv run pytest tests/unit
+      - name: Integration tests
+        run: uv run pytest tests/integration
 
   publish:
     needs: test
