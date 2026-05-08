@@ -92,3 +92,30 @@ def open_router_model(model: str) -> LLM:
 
     api_url = "https://openrouter.ai/api/v1"
     return OpenAILLM(model, api_key=api_key, base_url=api_url)
+
+
+def opencode_go_model(model: str) -> LLM:
+    """
+    Returns an OpenAI LLM instance configured for the OpenCode Go subscription.
+
+    Uses the OpenAI-compatible endpoint at https://opencode.ai/zen/go/v1.
+    Reference models as documented at https://opencode.ai/docs/es/go/
+    (e.g. ``kimi-k2.6``, ``deepseek-v4-pro``).
+
+    Args:
+        model: The name of the model to use.
+
+    Returns:
+        LLM: An OpenAI LLM instance bound to the OpenCode Go endpoint.
+    """
+    from dotenv import load_dotenv
+
+    load_dotenv()
+
+    api_key = os.getenv("OPENCODE_GO_API_KEY")
+
+    if not api_key:
+        raise ValueError("OPENCODE_GO_API_KEY not found in environment variables")
+
+    api_url = "https://opencode.ai/zen/go/v1"
+    return OpenAILLM(model, api_key=api_key, base_url=api_url)
